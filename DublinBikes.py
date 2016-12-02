@@ -17,7 +17,7 @@ def load_csv_file(name="data"):
             station_number = row[0]
             dict[station_number] = station_name
     return dict
-    
+
 def DublinBikes(q):
     Name_of_Station = load_csv_file()
     Stations = q.replace(" ","").split(",")
@@ -36,7 +36,7 @@ def DublinBikes(q):
             Open = Soup.find("open").text
             Updated = Soup.find("updated").text
             Connected = Soup.find("connected").text
-            Result += Name_of_Station[Station] + ": " + str(Available) + " bike(s) available and " + str(Free) + " station(s) free" +"\n"
+            Result += Name_of_Station[Station]+": "+str(Available)+" available & "+str(Free)+" free stands." +"\n"
             Session.cookies.clear()
     return(Result.rstrip("\n"))
 
