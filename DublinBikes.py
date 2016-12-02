@@ -20,10 +20,12 @@ def load_csv_file(name="data"):
 
 def GetStation(Station):
     with requests.Session() as Session:
-        Response1 = Session.get("http://www.dublinbikes.ie/All-Stations/Station-map?KeyWords=" + str(Station))
+        Response1 = Session.get("http://www.dublinbikes.ie/ezjscore/call/ezjsc%3A%3Atime")
         Response2 = Session.get("http://www.dublinbikes.ie/service/stationdetails/dublin/" + str(Station))
-        Text = Response2.text
-        return(Text)
+        Response3 = Session.get("http://www.dublinbikes.ie/service/stationdetails/dublin/" + str(Station))
+        Text = Response3.text
+    Session.cookies.clear()
+    return(Text)
 
 def DublinBikes(q):
     Name_of_Station = load_csv_file()
