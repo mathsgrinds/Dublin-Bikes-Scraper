@@ -3,6 +3,7 @@ import urllib2
 import requests
 import json
 import csv
+import time
 
 def load_csv_file(name="data"):
     dict = {}
