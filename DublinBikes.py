@@ -5,17 +5,17 @@ import json
 import csv
 import time
 
-def load_csv_file(name="data"):
+def LoadDict():
     dict = {}
-    for x in range(0,999):
-        dict[x] = "Station Number "+str(x)
-    filename = name+".csv"
-    with open(filename, 'rb') as f:
-        reader = csv.reader(f, delimiter=',')
-        for row in reader:
-            station_name = row[1]
-            station_number = row[0]
+    with requests.Session() as Session:
+        Response = Session.get("http://www.dublinbikes.ie/service/carto")
+        Page = Response.text
+        Soup = BeautifulSoup(Page)
+        for tag in Soup.findAll("marker"):
+            station_name = tag["name"]
+            station_number = tag["number"]
             dict[station_number] = station_name
+    Session.cookies.clear()
     return dict
 
 def GetStation(Station):
@@ -24,11 +24,10 @@ def GetStation(Station):
         Response2 = Session.get("http://www.dublinbikes.ie/service/stationdetails/dublin/" + str(Station))
         Response3 = Session.get("http://www.dublinbikes.ie/service/stationdetails/dublin/" + str(Station))
         Text = Response3.text
-    Session.cookies.clear()
     return(Text)
 
 def DublinBikes(q):
-    Name_of_Station = load_csv_file()
+    Name_of_Station = LoadDict()
     Stations = q.replace(" ","").split(",")
     Result = ""
     for Station in Stations:
@@ -44,4 +43,9 @@ def DublinBikes(q):
         Result += Name_of_Station[Station] + ": " + str(Available) + " bike(s) available and " + str(Free) + " station(s) free" +"\n"
     return(Result.rstrip("\n"))
 
-print DublinBikes("1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,84,86,87,88,89,90,91,92,93,94,95,97,99,100,101,102")
+# Load and print all stations:
+Stations = ""
+for Station in LoadDict():
+    Stations += Station+","
+Stations = Stations.rstrip(",")
+print DublinBikes(Stations)
