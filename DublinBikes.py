@@ -32,17 +32,6 @@ def GetStation(Station):
 
 def DublinBikes(q):
     Stations = q.replace(" ","").split(",")
-    html = ""
-    for Station in Stations:
-        Json = GetStation(Station)
-        Available = Json[u'bikes']
-        Free = Json[u'free']
-        Name = Json[u'name']
-        Result += Name_of_Station[Station] + ": " + str(Available) + " bike(s) available and " + str(Free) + " station(s) free" +"\n"
-    return(Result)
-
-def DublinBikes(q):
-    Stations = q.replace(" ","").split(",")
     Result = ""
     for Station in Stations:
         Json = GetStation(Station)
